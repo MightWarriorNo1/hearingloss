@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { siteContent } from "@/config/content";
 import { scoreAll } from "@/lib/scoring";
 import { clearSession, loadSession } from "@/lib/testStorage";
+import { useIsHydrated } from "@/lib/useIsHydrated";
 import { LinkButton } from "@/components/Button";
 import TestShell from "@/components/TestShell";
 import { CheckIcon } from "@/components/Icons";
@@ -18,36 +18,11 @@ const toneStyles: Record<string, string> = {
     "bg-[color-mix(in_srgb,var(--danger)_12%,transparent)] text-[var(--danger)]",
 };
 
-const noSubscribe = () => () => {};
-const getServerSnapshot = () => null;
-const getClientSnapshot = () => loadSession();
-
 export default function ResultsPage() {
-  const session = useSyncExternalStore(
-    noSubscribe,
-    getClientSnapshot,
-    getServerSnapshot,
-  );
+  const isHydrated = useIsHydrated();
 
-  const breakdown = useMemo(() => {
-    if (!session) return null;
-    return scoreAll(
-      session.questionnaireAnswers,
-      session.audioAnswers,
-      siteContent,
-    );
-  }, [session]);
-
-  // Pre-hydration server render → session is null; treat as loading state
-  // so we don't flash "no results" before client hydration completes.
-  const isClient = typeof window !== "undefined";
-  const state = !isClient
-    ? ({ status: "loading" } as const)
-    : !session
-      ? ({ status: "empty" } as const)
-      : ({ status: "ready", breakdown: breakdown! } as const);
-
-  if (state.status === "loading") {
+  // Server + first client render — deterministic loading state.
+  if (!isHydrated) {
     return (
       <TestShell percent={100}>
         <div className="py-20 text-center text-[var(--muted)]">Loading…</div>
@@ -55,7 +30,8 @@ export default function ResultsPage() {
     );
   }
 
-  if (state.status === "empty") {
+  const session = loadSession();
+  if (!session) {
     return (
       <TestShell percent={0}>
         <div className="bg-[var(--surface)] rounded-3xl p-8 sm:p-12 shadow-sm text-center">
@@ -74,11 +50,15 @@ export default function ResultsPage() {
     );
   }
 
-  const { category, totalScore, questionnaireScore, audioScore } = state.breakdown;
+  const { category, totalScore, questionnaireScore, audioScore } = scoreAll(
+    session.questionnaireAnswers,
+    session.audioAnswers,
+    siteContent,
+  );
 
   return (
     <TestShell percent={100}>
-      <div className="bg-[var(--surface)] rounded-3xl p-8 sm:p-12 shadow-sm">
+      <div className="bg-[var(--surface)] rounded-3xl p-8 sm:p-12 shadow-sm step-in">
         <div className="text-center">
           <span className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[color-mix(in_srgb,var(--success)_15%,transparent)] text-[var(--success)]">
             <CheckIcon size={26} />

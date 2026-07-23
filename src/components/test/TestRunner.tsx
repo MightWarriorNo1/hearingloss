@@ -158,6 +158,15 @@ export default function TestRunner() {
   const isAtStart =
     state.phase === "questionnaire" && state.questionIdx === 0;
 
+  const stepKey =
+    state.phase === "questionnaire"
+      ? `q-${state.questionIdx}`
+      : state.phase === "audio-intro"
+        ? "audio-intro"
+        : state.phase === "audio"
+          ? `a-${state.audioIdx}`
+          : "done";
+
   return (
     <TestShell
       percent={percent}
@@ -165,49 +174,51 @@ export default function TestRunner() {
       backHref={isAtStart ? "/test" : undefined}
       onBack={isAtStart ? undefined : handleBack}
     >
-      {state.phase === "questionnaire" && (
-        <QuestionnaireStep
-          question={siteContent.questionnaire[state.questionIdx]}
-          questionNumber={state.questionIdx + 1}
-          totalQuestions={siteContent.questionnaire.length}
-          currentAnswer={
-            state.questionnaireAnswers.find(
-              (a) =>
-                a.questionId ===
-                siteContent.questionnaire[state.questionIdx]?.id,
-            )?.answer
-          }
-          onAnswer={(answer) => dispatch({ type: "ANSWER_Q", answer })}
-        />
-      )}
+      <div key={stepKey} className="step-in">
+        {state.phase === "questionnaire" && (
+          <QuestionnaireStep
+            question={siteContent.questionnaire[state.questionIdx]}
+            questionNumber={state.questionIdx + 1}
+            totalQuestions={siteContent.questionnaire.length}
+            currentAnswer={
+              state.questionnaireAnswers.find(
+                (a) =>
+                  a.questionId ===
+                  siteContent.questionnaire[state.questionIdx]?.id,
+              )?.answer
+            }
+            onAnswer={(answer) => dispatch({ type: "ANSWER_Q", answer })}
+          />
+        )}
 
-      {state.phase === "audio-intro" && (
-        <AudioIntroStep
-          instructions={siteContent.test.audioInstructions}
-          onContinue={() => dispatch({ type: "START_AUDIO" })}
-        />
-      )}
+        {state.phase === "audio-intro" && (
+          <AudioIntroStep
+            instructions={siteContent.test.audioInstructions}
+            onContinue={() => dispatch({ type: "START_AUDIO" })}
+          />
+        )}
 
-      {state.phase === "audio" && siteContent.audioTests[state.audioIdx] && (
-        <AudioStep
-          test={siteContent.audioTests[state.audioIdx]}
-          index={state.audioIdx}
-          total={siteContent.audioTests.length}
-          currentAnswer={
-            state.audioAnswers.find(
-              (a) =>
-                a.audioId === siteContent.audioTests[state.audioIdx]?.id,
-            )?.answer
-          }
-          onAnswer={(answer) => dispatch({ type: "ANSWER_AUDIO", answer })}
-        />
-      )}
+        {state.phase === "audio" && siteContent.audioTests[state.audioIdx] && (
+          <AudioStep
+            test={siteContent.audioTests[state.audioIdx]}
+            index={state.audioIdx}
+            total={siteContent.audioTests.length}
+            currentAnswer={
+              state.audioAnswers.find(
+                (a) =>
+                  a.audioId === siteContent.audioTests[state.audioIdx]?.id,
+              )?.answer
+            }
+            onAnswer={(answer) => dispatch({ type: "ANSWER_AUDIO", answer })}
+          />
+        )}
 
-      {state.done && (
-        <div className="text-center py-20">
-          <p className="text-[var(--muted)]">Calculating your results…</p>
-        </div>
-      )}
+        {state.done && (
+          <div className="text-center py-20">
+            <p className="text-[var(--muted)]">Calculating your results…</p>
+          </div>
+        )}
+      </div>
     </TestShell>
   );
 }

@@ -79,7 +79,7 @@ export default function AudioStep({
       </p>
 
       <ul className="mt-10 space-y-4 max-w-md mx-auto">
-        <li>
+        <li className="step-rise" style={{ ["--step-delay" as string]: "80ms" }}>
           <AnswerPill
             selected={currentAnswer === "yes"}
             onClick={() => onAnswer("yes")}
@@ -88,7 +88,7 @@ export default function AudioStep({
             Yes, I heard it
           </AnswerPill>
         </li>
-        <li>
+        <li className="step-rise" style={{ ["--step-delay" as string]: "160ms" }}>
           <AnswerPill
             selected={currentAnswer === "no"}
             onClick={() => onAnswer("no")}
