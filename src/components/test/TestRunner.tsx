@@ -27,7 +27,7 @@ interface State {
 }
 
 type Action =
-  | { type: "ANSWER_Q"; answer: YesNoAnswer }
+  | { type: "ANSWER_Q"; optionId: string }
   | { type: "START_AUDIO" }
   | { type: "ANSWER_AUDIO"; answer: YesNoAnswer }
   | { type: "BACK" };
@@ -50,11 +50,11 @@ function reducer(state: State, action: Action): State {
       if (!current) return state;
       const answers = [
         ...state.questionnaireAnswers.filter((a) => a.questionId !== current.id),
-        { questionId: current.id, answer: action.answer },
+        { questionId: current.id, optionId: action.optionId },
       ];
       const nextIdx = nextQuestionIndex(
         state.questionIdx,
-        action.answer,
+        action.optionId,
         questionnaire,
       );
       if (nextIdx >= questionnaire.length) {
@@ -174,20 +174,20 @@ export default function TestRunner() {
       backHref={isAtStart ? "/test" : undefined}
       onBack={isAtStart ? undefined : handleBack}
     >
-      <div key={stepKey} className="step-in">
+      <div key={stepKey}>
         {state.phase === "questionnaire" && (
           <QuestionnaireStep
             question={siteContent.questionnaire[state.questionIdx]}
             questionNumber={state.questionIdx + 1}
             totalQuestions={siteContent.questionnaire.length}
-            currentAnswer={
+            currentOptionId={
               state.questionnaireAnswers.find(
                 (a) =>
                   a.questionId ===
                   siteContent.questionnaire[state.questionIdx]?.id,
-              )?.answer
+              )?.optionId
             }
-            onAnswer={(answer) => dispatch({ type: "ANSWER_Q", answer })}
+            onAnswer={(optionId) => dispatch({ type: "ANSWER_Q", optionId })}
           />
         )}
 

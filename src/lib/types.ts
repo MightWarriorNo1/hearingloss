@@ -1,15 +1,18 @@
 export type YesNoAnswer = "yes" | "no";
 
+export interface QuestionOption {
+  id: string;
+  label: string;
+  weight: number;
+}
+
 export interface Question {
   id: string;
   section?: string;
   prompt: string;
-  yesWeight: number;
-  noWeight: number;
-  branch?: {
-    onYes?: string;
-    onNo?: string;
-  };
+  options: QuestionOption[];
+  /** Optional branching: key = option id, value = next question id to jump to. */
+  branch?: Record<string, string>;
 }
 
 export interface AudioTest {
@@ -18,7 +21,9 @@ export interface AudioTest {
   volume: number;
   durationMs: number;
   prompt: string;
+  /** Points added when the user reports hearing the tone. */
   heardWeight: number;
+  /** Points added when the user reports not hearing the tone. */
   notHeardWeight: number;
 }
 
@@ -66,7 +71,7 @@ export interface SiteContent {
 
 export interface AnswerRecord {
   questionId: string;
-  answer: YesNoAnswer;
+  optionId: string;
 }
 
 export interface AudioResponseRecord {

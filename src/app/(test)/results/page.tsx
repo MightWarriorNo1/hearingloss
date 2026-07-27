@@ -58,22 +58,32 @@ export default function ResultsPage() {
 
   return (
     <TestShell percent={100}>
-      <div className="bg-[var(--surface)] rounded-3xl p-8 sm:p-12 shadow-sm step-in">
+      <div className="bg-[var(--surface)] rounded-3xl p-8 sm:p-12 shadow-sm a-fade">
         <div className="text-center">
-          <span className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[color-mix(in_srgb,var(--success)_15%,transparent)] text-[var(--success)]">
+          <span
+            className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[color-mix(in_srgb,var(--success)_15%,transparent)] text-[var(--success)] a-pop"
+            style={{ ["--anim-delay" as string]: "0ms" } as React.CSSProperties}
+          >
             <CheckIcon size={26} />
           </span>
-          <p className="mt-4 text-xs uppercase tracking-wider text-[var(--muted)] font-semibold">
+          <p
+            className="mt-4 text-xs uppercase tracking-wider text-[var(--muted)] font-semibold a-drop"
+            style={{ ["--anim-delay" as string]: "180ms" } as React.CSSProperties}
+          >
             Your Result
           </p>
-          <h1 className="mt-2 text-3xl sm:text-4xl font-bold">
+          <h1
+            className="mt-2 text-3xl sm:text-4xl font-bold a-blur"
+            style={{ ["--anim-delay" as string]: "260ms" } as React.CSSProperties}
+          >
             {category ? category.headline : "Test complete"}
           </h1>
           {category && (
             <span
-              className={`mt-4 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+              className={`mt-4 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold a-scale ${
                 toneStyles[category.tone] ?? toneStyles.warning
               }`}
+              style={{ ["--anim-delay" as string]: "380ms" } as React.CSSProperties}
             >
               {category.label}
             </span>
@@ -81,7 +91,10 @@ export default function ResultsPage() {
         </div>
 
         {category && (
-          <div className="mt-8 max-w-lg mx-auto text-center space-y-4">
+          <div
+            className="mt-8 max-w-lg mx-auto text-center space-y-4 a-rise"
+            style={{ ["--anim-delay" as string]: "480ms" } as React.CSSProperties}
+          >
             <p className="text-base leading-relaxed">{category.description}</p>
             <p className="text-sm text-[var(--muted)] leading-relaxed">
               {category.recommendation}
@@ -96,7 +109,10 @@ export default function ResultsPage() {
           </div>
         )}
 
-        <div className="mt-10 max-w-md mx-auto rounded-2xl bg-[var(--surface-muted)] p-5">
+        <div
+          className="mt-10 max-w-md mx-auto rounded-2xl bg-[var(--surface-muted)] p-5 a-scale"
+          style={{ ["--anim-delay" as string]: "620ms" } as React.CSSProperties}
+        >
           <p className="text-xs uppercase tracking-wider text-[var(--muted)] font-semibold text-center">
             Score breakdown
           </p>

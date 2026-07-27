@@ -17,6 +17,9 @@ export default function Header() {
           <Link href="/" className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
             Home
           </Link>
+          <Link href="/about" className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
+            About
+          </Link>
           <Link href="/test" className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
             Take the test
           </Link>

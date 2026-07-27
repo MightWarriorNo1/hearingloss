@@ -1,12 +1,13 @@
 import type { SiteContent } from "@/lib/types";
 
 /**
- * Placeholder content. Replace values here as the client delivers copy,
- * questions, audio specs, and result recommendations. All UI reads from
- * this single source of truth.
+ * Content source of truth. Real client questions and 4-tier result
+ * categories are in place; homepage copy, disclaimer, privacy, and
+ * audio-test spec are still placeholder pending client delivery.
  */
 export const siteContent: SiteContent = {
   site: {
+    // Client is providing branding/logo/name later. Placeholder for now.
     brandName: "HearWell",
     title: "HearWell — Free Online Hearing Screening",
     description:
@@ -14,6 +15,7 @@ export const siteContent: SiteContent = {
     tagline: "Check your hearing in 5 minutes",
   },
 
+  // ---- Placeholder — client to send homepage copy ----
   home: {
     heroHeadline: "How well are you hearing?",
     heroSubheadline:
@@ -37,7 +39,7 @@ export const siteContent: SiteContent = {
 
   test: {
     intro:
-      "This screening has two parts: a set of yes/no questions about your hearing in everyday situations, followed by a short audio listening test.",
+      "This screening has two parts: a set of questions about your hearing in everyday situations, followed by a short audio listening test.",
     questionnaireIntro:
       "Answer each question based on your hearing over the last few months.",
     audioIntro:
@@ -49,111 +51,122 @@ export const siteContent: SiteContent = {
     ],
   },
 
+  // ---- Placeholder disclaimer — client to send final medical wording ----
   disclaimer:
     "This screening is for informational purposes only and is not a medical diagnosis. If you have concerns about your hearing, please consult a licensed audiologist or physician.",
 
-  // ---- Placeholder questionnaire — swap in real questions from client ----
+  /**
+   * Real questions from client (Basecamp, 2026-07-24).
+   *
+   * Scoring rationale:
+   *   Q1 overall hearing        0 (excellent) → 4 (significant difficulty)
+   *   Q2 phone difficulty       0 (never)     → 4 (always)
+   *   Q3 mumbling               0 (never)     → 4 (always)
+   *   Q4 asymmetric hearing     0 (both same) or 1 (one ear worse) — asymmetry
+   *                             is often diagnostic rather than severity-driven
+   *   Q5 noisy environments     0 (never)     → 4 (always)
+   *
+   *   Maximum score: 17
+   *
+   * Client has NOT yet provided per-answer weights. These weights are
+   * my best-guess placeholders — flag for review when client responds.
+   */
   questionnaire: [
     {
       id: "q1",
-      section: "Daily Situations",
-      prompt: "Do you find it difficult to follow a conversation in a noisy restaurant?",
-      yesWeight: 1,
-      noWeight: 0,
+      section: "Self-assessment",
+      prompt: "How would you rate your overall hearing ability?",
+      options: [
+        { id: "significant", label: "I experience significant difficulty hearing", weight: 4 },
+        { id: "some", label: "I experience some difficulty hearing", weight: 3 },
+        { id: "minor", label: "I experience minor difficulty hearing", weight: 2 },
+        { id: "good", label: "My hearing is good", weight: 1 },
+        { id: "excellent", label: "My hearing is excellent", weight: 0 },
+      ],
     },
     {
       id: "q2",
-      section: "Daily Situations",
-      prompt: "Do people often seem to mumble when they speak to you?",
-      yesWeight: 1,
-      noWeight: 0,
+      section: "Everyday situations",
+      prompt:
+        "How often do you have difficulty hearing during phone conversations?",
+      options: [
+        { id: "always", label: "Always", weight: 4 },
+        { id: "frequently", label: "Frequently", weight: 3 },
+        { id: "sometimes", label: "Sometimes", weight: 2 },
+        { id: "rarely", label: "Rarely", weight: 1 },
+        { id: "never", label: "Never", weight: 0 },
+      ],
     },
     {
       id: "q3",
-      section: "Daily Situations",
-      prompt: "Do you frequently turn up the TV or radio louder than others prefer?",
-      yesWeight: 1,
-      noWeight: 0,
+      section: "Everyday situations",
+      prompt:
+        "How often does it seem that people are mumbling, even in quiet settings?",
+      options: [
+        { id: "always", label: "Always", weight: 4 },
+        { id: "frequently", label: "Frequently", weight: 3 },
+        { id: "sometimes", label: "Sometimes", weight: 2 },
+        { id: "rarely", label: "Rarely", weight: 1 },
+        { id: "never", label: "Never", weight: 0 },
+      ],
     },
     {
       id: "q4",
-      section: "Daily Situations",
-      prompt: "Do you have trouble hearing on the phone?",
-      yesWeight: 1,
-      noWeight: 0,
+      section: "Self-assessment",
+      prompt: "Do you hear better with one ear than the other?",
+      options: [
+        { id: "left", label: "My left ear hears better", weight: 1 },
+        { id: "right", label: "My right ear hears better", weight: 1 },
+        { id: "same", label: "Both ears hear about the same", weight: 0 },
+      ],
     },
     {
       id: "q5",
-      section: "Medical History",
-      prompt: "Have you been regularly exposed to loud noise (concerts, machinery, firearms)?",
-      yesWeight: 1,
-      noWeight: 0,
-    },
-    {
-      id: "q6",
-      section: "Medical History",
-      prompt: "Do you experience ringing or buzzing in your ears (tinnitus)?",
-      yesWeight: 1,
-      noWeight: 0,
+      section: "Everyday situations",
+      prompt:
+        "How often do you have difficulty understanding speech in noisy environments (restaurants, crowds, background noise)?",
+      options: [
+        { id: "always", label: "Always", weight: 4 },
+        { id: "frequently", label: "Frequently", weight: 3 },
+        { id: "sometimes", label: "Sometimes", weight: 2 },
+        { id: "rarely", label: "Rarely", weight: 1 },
+        { id: "never", label: "Never", weight: 0 },
+      ],
     },
   ],
 
-  // ---- Placeholder audio tests — swap in real files/frequencies from client ----
+  /**
+   * PLACEHOLDER audio tests. Client's real spec is:
+   *   "Right Ear + Left Ear assessments, each with three volume adjustment
+   *    tasks using +/- controls (max comfortable loudness, speech clarity
+   *    threshold, three barely audible sound tests)."
+   *
+   * This requires a very different UI (per-ear channel routing, +/- volume
+   * adjustment, threshold detection). Awaiting client clarification on
+   * the exact mechanism before rebuilding — kept as tone screening in the
+   * interim so the flow remains demonstrable.
+   */
   audioTests: [
-    {
-      id: "a1",
-      frequencyHz: 500,
-      volume: 0.15,
-      durationMs: 1200,
-      prompt: "Did you hear the tone?",
-      heardWeight: 0,
-      notHeardWeight: 1,
-    },
-    {
-      id: "a2",
-      frequencyHz: 1000,
-      volume: 0.12,
-      durationMs: 1200,
-      prompt: "Did you hear the tone?",
-      heardWeight: 0,
-      notHeardWeight: 1,
-    },
-    {
-      id: "a3",
-      frequencyHz: 2000,
-      volume: 0.1,
-      durationMs: 1200,
-      prompt: "Did you hear the tone?",
-      heardWeight: 0,
-      notHeardWeight: 1,
-    },
-    {
-      id: "a4",
-      frequencyHz: 4000,
-      volume: 0.08,
-      durationMs: 1200,
-      prompt: "Did you hear the tone?",
-      heardWeight: 0,
-      notHeardWeight: 1,
-    },
-    {
-      id: "a5",
-      frequencyHz: 8000,
-      volume: 0.08,
-      durationMs: 1200,
-      prompt: "Did you hear the tone?",
-      heardWeight: 0,
-      notHeardWeight: 1,
-    },
+    { id: "a1", frequencyHz: 500,  volume: 0.15, durationMs: 1200, prompt: "Did you hear the tone?", heardWeight: 0, notHeardWeight: 1 },
+    { id: "a2", frequencyHz: 1000, volume: 0.12, durationMs: 1200, prompt: "Did you hear the tone?", heardWeight: 0, notHeardWeight: 1 },
+    { id: "a3", frequencyHz: 2000, volume: 0.10, durationMs: 1200, prompt: "Did you hear the tone?", heardWeight: 0, notHeardWeight: 1 },
+    { id: "a4", frequencyHz: 4000, volume: 0.08, durationMs: 1200, prompt: "Did you hear the tone?", heardWeight: 0, notHeardWeight: 1 },
+    { id: "a5", frequencyHz: 8000, volume: 0.08, durationMs: 1200, prompt: "Did you hear the tone?", heardWeight: 0, notHeardWeight: 1 },
   ],
 
-  // ---- Placeholder result categories — swap in client copy + real thresholds ----
+  /**
+   * 4 result categories per client:
+   *   No indication / Mild / Moderate / Severe
+   *
+   * Score thresholds are placeholders — client should confirm cut-offs.
+   * Total possible score: 17 (questionnaire) + 5 (audio) = 22
+   */
   results: [
     {
       id: "none",
-      label: "No signs of hearing loss",
+      label: "No indication of hearing loss",
       minScore: 0,
-      maxScore: 2,
+      maxScore: 4,
       headline: "Your hearing appears healthy.",
       description:
         "Your responses suggest your hearing is likely within a normal range.",
@@ -163,9 +176,9 @@ export const siteContent: SiteContent = {
     },
     {
       id: "mild",
-      label: "Possible mild hearing loss",
-      minScore: 3,
-      maxScore: 5,
+      label: "Mild hearing loss",
+      minScore: 5,
+      maxScore: 9,
       headline: "You may have mild hearing loss.",
       description:
         "Your responses suggest you may be experiencing some early signs of hearing difficulty.",
@@ -176,16 +189,30 @@ export const siteContent: SiteContent = {
       tone: "warning",
     },
     {
-      id: "moderate-severe",
-      label: "Possible moderate to severe hearing loss",
-      minScore: 6,
-      maxScore: 100,
-      headline: "You may have significant hearing loss.",
+      id: "moderate",
+      label: "Moderate hearing loss",
+      minScore: 10,
+      maxScore: 15,
+      headline: "You may have moderate hearing loss.",
       description:
-        "Your responses suggest you may be experiencing meaningful hearing difficulty.",
+        "Your responses suggest meaningful hearing difficulty that could benefit from professional support.",
       recommendation:
-        "We strongly encourage you to book a full hearing evaluation with an audiologist soon.",
+        "We encourage you to book a hearing evaluation with a licensed audiologist.",
       ctaLabel: "Find an audiologist",
+      ctaHref: "#",
+      tone: "warning",
+    },
+    {
+      id: "severe",
+      label: "Severe hearing loss",
+      minScore: 16,
+      maxScore: 100,
+      headline: "You may have severe hearing loss.",
+      description:
+        "Your responses suggest significant hearing difficulty across multiple everyday situations.",
+      recommendation:
+        "We strongly recommend booking a full hearing evaluation with an audiologist as soon as possible.",
+      ctaLabel: "Book a hearing evaluation",
       ctaHref: "#",
       tone: "danger",
     },

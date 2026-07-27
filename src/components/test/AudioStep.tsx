@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { AudioTest, YesNoAnswer } from "@/lib/types";
 import { playTone } from "@/lib/audio";
 import AnswerPill from "./AnswerPill";
 import { PlayIcon } from "../Icons";
+
+const delay = (ms: number): CSSProperties =>
+  ({ ["--anim-delay" as string]: `${ms}ms` }) as CSSProperties;
 
 export default function AudioStep({
   test,
@@ -23,7 +26,6 @@ export default function AudioStep({
   const [hasPlayed, setHasPlayed] = useState(false);
   const activeTestId = useRef<string>("");
 
-  // Reset per-question play state when the test changes.
   useEffect(() => {
     if (activeTestId.current !== test.id) {
       activeTestId.current = test.id;
@@ -49,14 +51,21 @@ export default function AudioStep({
 
   return (
     <div className="text-center">
-      <p className="text-xs uppercase tracking-wider text-[var(--muted)] font-semibold">
+      <p
+        className="text-xs uppercase tracking-wider text-[var(--muted)] font-semibold a-drop"
+        style={delay(0)}
+      >
         Audio {index + 1} of {total}
       </p>
-      <h1 className="mt-4 text-2xl sm:text-3xl font-semibold">
+
+      <h1
+        className="mt-4 text-2xl sm:text-3xl font-semibold a-blur"
+        style={delay(100)}
+      >
         {test.prompt}
       </h1>
 
-      <div className="mt-10 flex justify-center">
+      <div className="mt-10 flex justify-center a-pop" style={delay(220)}>
         <button
           type="button"
           onClick={handlePlay}
@@ -70,7 +79,10 @@ export default function AudioStep({
         </button>
       </div>
 
-      <p className="mt-4 text-sm text-[var(--muted)]">
+      <p
+        className="mt-4 text-sm text-[var(--muted)] a-fade"
+        style={delay(360)}
+      >
         {playing
           ? "Playing…"
           : hasPlayed
@@ -79,7 +91,7 @@ export default function AudioStep({
       </p>
 
       <ul className="mt-10 space-y-4 max-w-md mx-auto">
-        <li className="step-rise" style={{ ["--step-delay" as string]: "80ms" }}>
+        <li className="a-slide-left" style={delay(460)}>
           <AnswerPill
             selected={currentAnswer === "yes"}
             onClick={() => onAnswer("yes")}
@@ -88,7 +100,7 @@ export default function AudioStep({
             Yes, I heard it
           </AnswerPill>
         </li>
-        <li className="step-rise" style={{ ["--step-delay" as string]: "160ms" }}>
+        <li className="a-slide-right" style={delay(540)}>
           <AnswerPill
             selected={currentAnswer === "no"}
             onClick={() => onAnswer("no")}

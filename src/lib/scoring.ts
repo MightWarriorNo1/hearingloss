@@ -12,10 +12,10 @@ export function scoreQuestionnaire(
   questions: Question[],
 ): number {
   const byId = new Map(questions.map((q) => [q.id, q]));
-  return answers.reduce((sum, { questionId, answer }) => {
+  return answers.reduce((sum, { questionId, optionId }) => {
     const q = byId.get(questionId);
-    if (!q) return sum;
-    return sum + (answer === "yes" ? q.yesWeight : q.noWeight);
+    const option = q?.options.find((o) => o.id === optionId);
+    return sum + (option?.weight ?? 0);
   }, 0);
 }
 
@@ -66,16 +66,15 @@ export function scoreAll(
 
 /**
  * Follow branching to find the next question index. Falls back to
- * sequential order if no branching rule applies.
+ * sequential order if no branching rule applies for this option.
  */
 export function nextQuestionIndex(
   currentIndex: number,
-  answer: "yes" | "no",
+  optionId: string,
   questions: Question[],
 ): number {
   const current = questions[currentIndex];
-  const targetId =
-    answer === "yes" ? current?.branch?.onYes : current?.branch?.onNo;
+  const targetId = current?.branch?.[optionId];
   if (targetId) {
     const idx = questions.findIndex((q) => q.id === targetId);
     if (idx >= 0) return idx;

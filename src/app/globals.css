@@ -1,26 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f1ee;
+  /* Fleming Medical–inspired palette (placeholder until client sends brand assets).
+     Sampled from flemingmedical.ie header + CTA button. */
+  --background: #f4f7fa;
   --surface: #ffffff;
-  --surface-muted: #ede8e3;
-  --foreground: #111111;
-  --border: #e5e0da;
-  --border-strong: #1a1a1a;
-  --muted: #5c5c5c;
+  --surface-muted: #eaf1f7;
+  --foreground: #0c2f52;
+  --border: #dbe4ec;
+  --border-strong: #1a6cb2;
+  --muted: #5f6f82;
 
-  --cta: #1a1a1a;
-  --cta-hover: #000000;
+  --cta: #1a6cb2;
+  --cta-hover: #155a94;
   --cta-foreground: #ffffff;
 
-  --primary: #e94b28;
-  --primary-hover: #c8391a;
-  --primary-soft: #fdece6;
+  --primary: #1a6cb2;
+  --primary-hover: #155a94;
+  --primary-soft: #e6f0f8;
   --primary-foreground: #ffffff;
 
-  --accent-progress: #e94b28;
-  --accent-pill: #d6f0d6;
-  --accent-pill-text: #1f7a3a;
+  --accent-progress: #2a90d3;
+  --accent-pill: #d6eaf6;
+  --accent-pill-text: #0c4a7a;
 
   --success: #16a34a;
   --warning: #f59e0b;
@@ -76,38 +78,75 @@ h1, h2, h3 {
   border-radius: var(--radius-sm);
 }
 
-@keyframes step-in {
-  from {
-    opacity: 0;
-    transform: translateX(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+/* ---- Animation library ---- */
+
+@keyframes anim-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-@keyframes step-rise {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes anim-drop {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.step-in {
-  animation: step-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+@keyframes anim-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes anim-slide-left {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes anim-slide-right {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes anim-pop {
+  0%   { opacity: 0; transform: scale(0.7); }
+  60%  { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes anim-blur-in {
+  from { opacity: 0; filter: blur(8px); transform: scale(0.98); }
+  to   { opacity: 1; filter: blur(0);   transform: scale(1); }
+}
+
+@keyframes anim-scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Utility classes — each supports a --anim-delay CSS custom property */
+.a-fade        { animation: anim-fade 380ms ease-out both; animation-delay: var(--anim-delay, 0ms); }
+.a-drop        { animation: anim-drop 420ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--anim-delay, 0ms); }
+.a-rise        { animation: anim-rise 460ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--anim-delay, 0ms); }
+.a-slide-left  { animation: anim-slide-left 460ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--anim-delay, 0ms); }
+.a-slide-right { animation: anim-slide-right 460ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--anim-delay, 0ms); }
+.a-pop         { animation: anim-pop 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both; animation-delay: var(--anim-delay, 0ms); }
+.a-blur        { animation: anim-blur-in 520ms ease-out both; animation-delay: var(--anim-delay, 0ms); }
+.a-scale       { animation: anim-scale-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--anim-delay, 0ms); }
+
+/* Legacy aliases kept so existing imports keep working */
+.step-in { animation: anim-fade 260ms ease-out both; }
 .step-rise {
-  animation: step-rise 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: anim-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: var(--step-delay, 0ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .a-fade,
+  .a-drop,
+  .a-rise,
+  .a-slide-left,
+  .a-slide-right,
+  .a-pop,
+  .a-blur,
+  .a-scale,
   .step-in,
   .step-rise {
     animation: none !important;
