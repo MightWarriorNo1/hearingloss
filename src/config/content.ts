@@ -7,9 +7,8 @@ import type { SiteContent } from "@/lib/types";
  */
 export const siteContent: SiteContent = {
   site: {
-    // Client is providing branding/logo/name later. Placeholder for now.
-    brandName: "HearWell",
-    title: "HearWell — Free Online Hearing Screening",
+    brandName: "Fleming Medical",
+    title: "Fleming Medical — Free Online Hearing Screening",
     description:
       "A quick, private hearing screening you can take at home in about 5 minutes.",
     tagline: "Check your hearing in 5 minutes",
