@@ -54,7 +54,7 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/terms" className="hover:text-[var(--foreground)]">
-                Terms of Use
+                Terms & Conditions
               </Link>
             </li>
           </ul>

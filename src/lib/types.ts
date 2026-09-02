@@ -40,6 +40,12 @@ export interface ResultCategory {
   tone: "success" | "warning" | "danger";
 }
 
+export interface PageSection {
+  title?: string;
+  paragraphs?: string[];
+  list?: string[];
+}
+
 export interface SiteContent {
   site: {
     brandName: string;

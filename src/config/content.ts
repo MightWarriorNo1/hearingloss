@@ -2,8 +2,8 @@ import type { SiteContent } from "@/lib/types";
 
 /**
  * Content source of truth. Real client questions and 4-tier result
- * categories are in place; homepage copy, disclaimer, privacy, and
- * audio-test spec are still placeholder pending client delivery.
+ * categories are in place; homepage copy and audio-test spec are still
+ * placeholder pending client delivery.
  */
 export const siteContent: SiteContent = {
   site: {
@@ -50,9 +50,9 @@ export const siteContent: SiteContent = {
     ],
   },
 
-  // ---- Placeholder disclaimer — client to send final medical wording ----
+  // Site-wide disclaimer (short form; full text on /disclaimer)
   disclaimer:
-    "This screening is for informational purposes only and is not a medical diagnosis. If you have concerns about your hearing, please consult a licensed audiologist or physician.",
+    "This hearing test is provided for informational and screening purposes only and is not a medical diagnosis. If you have concerns about your hearing, please consult a qualified healthcare professional, audiologist, or hearing specialist.",
 
   /**
    * Real questions from client (Basecamp, 2026-07-24).
