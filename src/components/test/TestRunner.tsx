@@ -10,6 +10,10 @@ import type {
   AudioResponseRecord,
   YesNoAnswer,
 } from "@/lib/types";
+import {
+  siteTestPaths,
+  type TestFlowPaths,
+} from "@/lib/testFlowPaths";
 import TestShell from "../TestShell";
 import QuestionnaireStep from "./QuestionnaireStep";
 import AudioIntroStep from "./AudioIntroStep";
@@ -132,7 +136,11 @@ function computePercent(state: State): number {
   return Math.round((completed / total) * 100);
 }
 
-export default function TestRunner() {
+interface Props {
+  paths?: TestFlowPaths;
+}
+
+export default function TestRunner({ paths = siteTestPaths }: Props) {
   const router = useRouter();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -143,8 +151,8 @@ export default function TestRunner() {
       audioAnswers: state.audioAnswers,
       completedAt: new Date().toISOString(),
     });
-    router.push("/results");
-  }, [state.questionnaireAnswers, state.audioAnswers, router]);
+    router.push(paths.results);
+  }, [state.questionnaireAnswers, state.audioAnswers, router, paths.results]);
 
   if (state.done && typeof window !== "undefined") {
     // Fire in a microtask so the render commits first.
@@ -171,7 +179,7 @@ export default function TestRunner() {
     <TestShell
       percent={percent}
       showPill
-      backHref={isAtStart ? "/test" : undefined}
+      backHref={isAtStart ? paths.intro : undefined}
       onBack={isAtStart ? undefined : handleBack}
     >
       <div key={stepKey}>

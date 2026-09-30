@@ -15,11 +15,12 @@ interface Props {
 
 export default function TestShell({
   percent,
-  backHref = "/",
+  backHref,
   onBack,
   showPill = true,
   children,
 }: Props) {
+  const showBack = Boolean(onBack || backHref);
   const backContent = (
     <>
       <ArrowLeftIcon size={16} />
@@ -33,19 +34,23 @@ export default function TestShell({
     <div className="min-h-full">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12">
         <div className="relative flex items-start">
-          {onBack ? (
-            <button
-              type="button"
-              onClick={onBack}
-              className={`absolute left-0 top-0 ${backClass}`}
-            >
-              {backContent}
-            </button>
-          ) : (
-            <Link href={backHref} className={`absolute left-0 top-0 ${backClass}`}>
-              {backContent}
-            </Link>
-          )}
+          {showBack &&
+            (onBack ? (
+              <button
+                type="button"
+                onClick={onBack}
+                className={`absolute left-0 top-0 ${backClass}`}
+              >
+                {backContent}
+              </button>
+            ) : (
+              <Link
+                href={backHref!}
+                className={`absolute left-0 top-0 ${backClass}`}
+              >
+                {backContent}
+              </Link>
+            ))}
           <div className="flex-1 text-center">
             <p className="text-sm text-[var(--foreground)]">
               Complete our{" "}
